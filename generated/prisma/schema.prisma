@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum StatusAluno {
+  ATIVO
+  INATIVO
+}
+
+enum StatusPagamento {
+  PAGO
+  PENDENTE
+  ATRASADO
+}
+
+enum TipoMaterial {
+  PDF
+  IMAGEM
+}
+
+enum DiaSemana {
+  DOMINGO
+  SEGUNDA
+  TERCA
+  QUARTA
+  QUINTA
+  SEXTA
+  SABADO
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  nome      String
+  senha     String
+  createdAt DateTime @default(now())
+
+  aulas Aula[]
+
+  @@map("user")
+}
+
+model Materia {
+  id   Int    @id @default(autoincrement())
+  nome String @unique
+
+  materiaisDidaticos MaterialDidatico[]
+
+  @@map("materias")
+}
+
+model Aluno {
+  id                  Int         @id @default(autoincrement())
+  nome                String
+  status              StatusAluno @default(ATIVO)
+  dataMatricula       DateTime    @default(now())
+  nomeResponsavel     String
+  telefoneResponsavel String?
+  mensalidade         Decimal
+  observacao          String?
+
+  pagamentos Pagamento[]
+  aulas      Aula[]
+
+  @@map("alunos")
+}
+
+model Aula {
+  id Int @id @default(autoincrement())
+
+  diaSemana     DiaSemana
+  horarioInicio String
+  horarioFim    String
+  observacoes   String?
+
+  alunos Aluno[]
+
+  professorId Int
+  professor   User @relation(fields: [professorId], references: [id])
+
+  @@map("aulas")
+}
+
+model Pagamento {
+  id             Int             @id @default(autoincrement())
+  mesReferencia  String
+  dataVencimento DateTime
+  valor          Decimal
+  status         StatusPagamento @default(PENDENTE)
+  dataPagamento  DateTime?
+
+  alunoId Int
+  aluno   Aluno @relation(fields: [alunoId], references: [id])
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  @@map("pagamentos")
+}
+
+model MaterialDidatico {
+  id             Int          @id @default(autoincrement())
+  titulo         String
+  tipo           TipoMaterial
+  urlArquivo     String
+  totalDownloads Int          @default(0)
+
+  materiaId Int
+  materia   Materia @relation(fields: [materiaId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@map("materiais_didaticos")
+}

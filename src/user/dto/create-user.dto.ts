@@ -1,0 +1,19 @@
+import { IsAlphanumeric, IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator"
+
+
+export class CreateUserDto {
+    @IsEmail({},{message:"Formato de email invalido"})
+    @IsNotEmpty({message:"Email não pode ser vazio"})
+    email: string;
+
+    @IsString({message:"Nome deve ser uma string"})
+    @IsNotEmpty({message: "Nome não pode ser vazio"})
+    @MinLength(3,{message:"Nome deve ter no mínimo 3 caracteres"})
+    nome: string;
+
+    @IsAlphanumeric()
+    @IsNotEmpty({message: "Senha não pode ser vazio"})
+    @MinLength(6,{message:"Senha deve ter no mínimo 6 caracteres"})
+    senha: string;
+    
+}
