@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import { TipoMaterial } from 'generated/prisma';
 
 export class CreateMaterialDidaticoDto {
-  @IsString()
+  @IsString({message: "nome é obrigatorio"})
   @IsNotEmpty()
   titulo: string;
 
