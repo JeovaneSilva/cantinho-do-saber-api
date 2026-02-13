@@ -28,4 +28,6 @@ export class CreatePagamentoDto {
   @IsInt({ message: 'O ID do aluno deve ser um número inteiro.' })
   @IsNotEmpty({ message: 'É necessário vincular o pagamento a um aluno.' })
   alunoId: number;
+
+  
 }

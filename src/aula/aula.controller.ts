@@ -5,11 +5,13 @@ import {
   Body, 
   Patch, 
   Param, 
+  Delete, // <--- Importar Delete
   Query, 
   ParseIntPipe 
 } from '@nestjs/common';
 import { AulaService } from './aula.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
+import { UpdateAulaDto } from './dto/update-aula.dto'; // <--- Importar UpdateDto
 import { DiaSemana } from 'generated/prisma';
 
 @Controller('aulas') 
@@ -26,6 +28,25 @@ export class AulaController {
   findAll(@Query('dia') dia?: DiaSemana) {
     return this.aulaService.findAll(dia);
   }
+
+  // --- NOVOS MÉTODOS ---
+
+  // 1. Atualizar dados da aula (Dia, Horário, Observações)
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number, 
+    @Body() updateAulaDto: UpdateAulaDto
+  ) {
+    return this.aulaService.update(id, updateAulaDto);
+  }
+
+  // 2. Excluir a aula inteira
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.aulaService.remove(id);
+  }
+
+  // ---------------------
 
   @Patch(':id/adicionar-aluno/:alunoId')
   addAluno(

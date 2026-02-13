@@ -17,7 +17,7 @@ export class AlunosService {
     const alunos = await this.prisma.aluno.findMany({
       include: {
         pagamentos: {
-          orderBy: { dataVencimento: 'desc' }, 
+          orderBy: { createdAt: 'asc' }, 
           take: 1,
         },
       },

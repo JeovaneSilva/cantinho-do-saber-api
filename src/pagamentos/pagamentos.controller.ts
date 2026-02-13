@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { PagamentosService } from './pagamentos.service';
 import { CreatePagamentoDto } from './dto/create-pagamento.dto';
 import { UpdatePagamentoDto } from './dto/update-pagamento.dto';
@@ -12,9 +12,9 @@ export class PagamentosController {
     return this.pagamentosService.create(createPagamentoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.pagamentosService.findAll();
+ @Get()
+  findAll(@Query('mes') mes?: string) {
+    return this.pagamentosService.findAll(mes);
   }
 
   @Get(':id')
