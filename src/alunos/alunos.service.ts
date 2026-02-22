@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { 
+  Injectable, 
+  NotFoundException, 
+  InternalServerErrorException 
+} from '@nestjs/common';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,41 +11,114 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class AlunosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createAlunoDto: CreateAlunoDto) {
-    return this.prisma.aluno.create({
-      data: { ...createAlunoDto, status: 'ATIVO' },
-    });
+  private _formatAluno(aluno: any) {
+    if (!aluno) return null;
+    const ultimoPagamento = aluno.pagamentos && aluno.pagamentos.length > 0 ? aluno.pagamentos[0] : null;
+    
+    return {
+      ...aluno,
+      pagamentos: undefined, 
+      statusPagamento: ultimoPagamento ? ultimoPagamento.status : 'PENDENTE',
+    };
+  }
+
+  async create(createAlunoDto: CreateAlunoDto) {
+    try {
+      await this.prisma.aluno.create({
+        data: { ...createAlunoDto, status: 'ATIVO' },
+      });
+      
+      return { message: 'Aluno cadastrado com sucesso!' };
+    } catch (error) {
+      console.error('[AlunosService.create] Erro:', error);
+      throw new InternalServerErrorException('Erro ao cadastrar o aluno.');
+    }
   }
 
   async findAll() {
-    const alunos = await this.prisma.aluno.findMany({
-      include: {
-        pagamentos: {
-          orderBy: { createdAt: 'asc' }, 
-          take: 1,
+    try {
+      const alunos = await this.prisma.aluno.findMany({
+        include: {
+          pagamentos: {
+            orderBy: { dataVencimento: 'desc' },
+            take: 1,
+          },
         },
-      },
-    });
+      });
 
-    return alunos.map((aluno) => {
-      const ultimoPagamento = aluno.pagamentos[0];
-      return {
-        ...aluno,
-        statusPagamento: ultimoPagamento ? ultimoPagamento.status : 'PENDENTE',
-      };
-    });
+      return alunos.map((aluno) => this._formatAluno(aluno));
+    } catch (error) {
+      console.error('[AlunosService.findAll] Erro:', error);
+      throw new InternalServerErrorException('Erro ao listar os alunos.');
+    }
   }
 
-  findOne(id: number) {
-    return this.prisma.aluno.findUnique({
-      where: { id: id },
-    });
+  async findOne(id: number) {
+    try {
+      const aluno = await this.prisma.aluno.findUnique({
+        where: { id: id },
+        include: {
+          pagamentos: {
+            orderBy: { dataVencimento: 'desc' },
+            take: 1,
+          },
+        },
+      });
+
+      if (!aluno) {
+        throw new NotFoundException(`Aluno com o ID ${id} não foi encontrado.`);
+      }
+
+      return this._formatAluno(aluno);
+    } catch (error) {
+      console.error(`[AlunosService.findOne] Erro no ID ${id}:`, error);
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('Erro interno ao buscar o aluno.');
+    }
   }
 
-  update(id: number, updateAlunoDto: UpdateAlunoDto) {
-    return this.prisma.aluno.update({
-      where: { id: id },
-      data: updateAlunoDto,
-    });
+  async update(id: number, updateAlunoDto: UpdateAlunoDto) {
+    try {
+      const alunoExiste = await this.prisma.aluno.findUnique({ where: { id: id } });
+      if (!alunoExiste) {
+        throw new NotFoundException(`Não é possível atualizar: Aluno com ID ${id} não encontrado.`);
+      }
+
+      const alunoAtualizado = await this.prisma.aluno.update({
+        where: { id: id },
+        data: updateAlunoDto,
+        include: {
+          pagamentos: {
+            orderBy: { dataVencimento: 'desc' },
+            take: 1,
+          },
+        },
+      });
+
+      return this._formatAluno(alunoAtualizado);
+    } catch (error) {
+      console.error(`[AlunosService.update] Erro no ID ${id}:`, error);
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('Erro ao tentar atualizar os dados do aluno.');
+    }
+  }
+  
+  async remove(id: number) {
+    try {
+      const alunoExiste = await this.prisma.aluno.findUnique({ where: { id: id } });
+      if (!alunoExiste) {
+        throw new NotFoundException(`Aluno com ID ${id} não encontrado.`);
+      }
+
+      await this.prisma.aluno.delete({
+        where: { id: id }
+      });
+
+      return { message: 'Aluno removido com sucesso' };
+    } catch (error) {
+      console.error(`[AlunosService.remove] Erro no ID ${id}:`, error);
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('Erro ao excluir aluno. Verifique se ele possui pagamentos ou aulas vinculadas.');
+    }
   }
 }

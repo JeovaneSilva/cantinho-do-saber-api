@@ -200,7 +200,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\jeova\\OneDrive\\Documentos\\pessoal\\projetos\\cantinho-do-saber-api\\generated\\prisma",
+      "value": "C:\\Users\\vieir\\OneDrive\\Documentos\\estudos\\cantinho-do-saber-api\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -214,7 +214,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\jeova\\OneDrive\\Documentos\\pessoal\\projetos\\cantinho-do-saber-api\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\vieir\\OneDrive\\Documentos\\estudos\\cantinho-do-saber-api\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

@@ -1,7 +1,8 @@
 import { 
   Injectable, 
   NotFoundException, 
-  InternalServerErrorException 
+  InternalServerErrorException,
+  HttpException
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateMaterialDidaticoDto } from './dto/create-material-didatico.dto';
@@ -11,19 +12,37 @@ import { UpdateMaterialDidaticoDto } from './dto/update-material-didatico.dto';
 export class MaterialDidaticoService {
   constructor(private readonly prisma: PrismaService) {}
 
+
+  private async _garantirQueMaterialExiste(id: number) {
+    const material = await this.prisma.materialDidatico.findUnique({
+      where: { id },
+      select: { id: true }
+    });
+
+    if (!material) {
+      throw new NotFoundException(`Material didático com ID ${id} não foi encontrado.`);
+    }
+  }
+
+  private async _garantirQueMateriaExiste(materiaId: number) {
+    const materia = await this.prisma.materia.findUnique({
+      where: { id: materiaId },
+      select: { id: true } 
+    });
+
+    if (!materia) {
+      throw new NotFoundException(`Matéria com ID ${materiaId} não existe no sistema.`);
+    }
+  }
+
+
   async create(createDto: CreateMaterialDidaticoDto, file: Express.Multer.File) {
     try {
-      const materiaExiste = await this.prisma.materia.findUnique({
-        where: { id: createDto.materiaId },
-      });
-
-      if (!materiaExiste) {
-        throw new NotFoundException(`Matéria com ID ${createDto.materiaId} não encontrada.`);
-      }
+      await this._garantirQueMateriaExiste(createDto.materiaId);
 
       const caminhoArquivo = `${file.filename}`; 
 
-      return await this.prisma.materialDidatico.create({
+      await this.prisma.materialDidatico.create({
         data: {
           titulo: createDto.titulo,
           tipo: createDto.tipo,
@@ -33,10 +52,12 @@ export class MaterialDidaticoService {
         },
       });
 
+      return { message: 'Material didático compartilhado com sucesso!' };
+
     } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      console.error(error);
-      throw new InternalServerErrorException('Erro ao cadastrar o material didático.');
+      if (error instanceof HttpException) throw error;
+      console.error('[MaterialDidaticoService.create] Erro:', error);
+      throw new InternalServerErrorException('Erro interno ao cadastrar o material didático.');
     }
   }
 
@@ -48,8 +69,8 @@ export class MaterialDidaticoService {
         },
       });
     } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException('Erro ao buscar materiais.');
+      console.error('[MaterialDidaticoService.findAll] Erro:', error);
+      throw new InternalServerErrorException('Erro ao buscar a lista de materiais.');
     }
   }
 
@@ -66,48 +87,46 @@ export class MaterialDidaticoService {
 
       return material;
     } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      console.error(error);
-      throw new InternalServerErrorException('Erro ao buscar o material.');
+      if (error instanceof HttpException) throw error;
+      console.error(`[MaterialDidaticoService.findOne] Erro no ID ${id}:`, error);
+      throw new InternalServerErrorException('Erro ao buscar os detalhes do material.');
     }
   }
 
   async update(id: number, updateDto: UpdateMaterialDidaticoDto) {
     try {
-      await this.findOne(id);
+      await this._garantirQueMaterialExiste(id);
 
       if (updateDto.materiaId) {
-        const novaMateriaExiste = await this.prisma.materia.findUnique({
-          where: { id: updateDto.materiaId },
-        });
-        if (!novaMateriaExiste) {
-          throw new NotFoundException(`A nova matéria informada (ID ${updateDto.materiaId}) não existe.`);
-        }
+        await this._garantirQueMateriaExiste(updateDto.materiaId);
       }
 
       return await this.prisma.materialDidatico.update({
         where: { id },
         data: updateDto,
+        include: { materia: true }
       });
 
     } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      console.error(error);
-      throw new InternalServerErrorException('Erro ao atualizar o material.');
+      if (error instanceof HttpException) throw error;
+      console.error(`[MaterialDidaticoService.update] Erro no ID ${id}:`, error);
+      throw new InternalServerErrorException('Erro ao atualizar as informações do material.');
     }
   }
 
   async remove(id: number) {
     try {
-      await this.findOne(id); 
+      await this._garantirQueMaterialExiste(id); 
 
-      return await this.prisma.materialDidatico.delete({
+      await this.prisma.materialDidatico.delete({
         where: { id },
       });
+
+      return { message: 'Material didático removido com sucesso!' };
     } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      console.error(error);
-      throw new InternalServerErrorException('Erro ao remover o material.');
+      if (error instanceof HttpException) throw error;
+      console.error(`[MaterialDidaticoService.remove] Erro no ID ${id}:`, error);
+      throw new InternalServerErrorException('Erro ao tentar remover o material.');
     }
   }
 }

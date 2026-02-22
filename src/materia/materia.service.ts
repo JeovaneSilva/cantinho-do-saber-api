@@ -2,7 +2,8 @@ import {
   ConflictException, 
   Injectable, 
   InternalServerErrorException, 
-  NotFoundException 
+  NotFoundException,
+  HttpException
 } from '@nestjs/common';
 import { CreateMateriaDto } from './dto/create-materia.dto';
 import { UpdateMateriaDto } from './dto/update-materia.dto';
@@ -11,6 +12,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class MateriaService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private async _garantirQueMateriaExiste(id: number) {
+    const materia = await this.prisma.materia.findUnique({
+      where: { id },
+      select: { id: true }
+    });
+
+    if (!materia) {
+      throw new NotFoundException(`Matéria com ID ${id} não encontrada.`);
+    }
+  }
+
 
   async create(createMateriaDto: CreateMateriaDto) {
     try {
@@ -27,21 +40,18 @@ export class MateriaService {
       });
 
     } catch (error) {
-      if (error instanceof ConflictException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       
-      console.error(error);
+      console.error('[MateriaService.create] Erro:', error);
       throw new InternalServerErrorException('Erro ao criar a matéria.');
     }
   }
 
   async findAll() {
     try {
-      const allMaterias = await this.prisma.materia.findMany();
-      return allMaterias;
+      return await this.prisma.materia.findMany();
     } catch (error) {
-      console.error(error);
+      console.error('[MateriaService.findAll] Erro:', error);
       throw new InternalServerErrorException('Erro ao buscar as matérias.');
     }
   }
@@ -58,17 +68,15 @@ export class MateriaService {
 
       return materia;
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      console.error(error);
+      if (error instanceof HttpException) throw error;
+      console.error('[MateriaService.findOne] Erro:', error);
       throw new InternalServerErrorException('Erro ao buscar a matéria.');
     }
   }
 
   async update(id: number, updateMateriaDto: UpdateMateriaDto) {
     try {
-      await this.findOne(id);
+      await this._garantirQueMateriaExiste(id);
 
       if (updateMateriaDto.nome) {
         const nomeEmUso = await this.prisma.materia.findUnique({
@@ -86,27 +94,9 @@ export class MateriaService {
       });
 
     } catch (error) {
-      if (error instanceof NotFoundException || error instanceof ConflictException) {
-        throw error;
-      }
-      console.error(error);
+      if (error instanceof HttpException) throw error;
+      console.error('[MateriaService.update] Erro:', error);
       throw new InternalServerErrorException('Erro ao atualizar a matéria.');
-    }
-  }
-
-  async remove(id: number) {
-    try {
-      await this.findOne(id);
-
-      return await this.prisma.materia.delete({
-        where: { id },
-      });
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      console.error(error);
-      throw new InternalServerErrorException('Erro ao remover a matéria.');
     }
   }
 }

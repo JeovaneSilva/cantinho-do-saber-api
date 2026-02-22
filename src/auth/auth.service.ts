@@ -1,7 +1,7 @@
 import {
   Injectable,
-  NotFoundException,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -16,29 +16,48 @@ export class AuthService {
   ) {}
 
   private async generateAccessToken(userId: number) {
-    const payload = {
-      sub: userId,
-    };
+    try {
+      const payload = {
+        sub: userId,
+      };
 
-    const accessToken = await this.jwtService.signAsync(payload, {
-      secret: process.env.SECRET_KEY,
-      expiresIn: '15m',
-    });
+      const accessToken = await this.jwtService.signAsync(payload, {
+        secret: process.env.SECRET_KEY,
+        expiresIn: '7d',
+      });
 
-    return { access_token: accessToken };
+      return { access_token: accessToken };
+    } catch (error) {
+      console.error('[AuthService.generateAccessToken] Erro:', error);
+      throw new InternalServerErrorException('Erro interno ao gerar a sessão do usuário.');
+    }
   }
 
   async signIn(params: AuthDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: params.email },
-    });
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email: params.email },
+      });
 
-    if (!user) throw new NotFoundException('Usuário não encontrado');
+      if (!user) {
+        throw new UnauthorizedException('E-mail ou senha inválidos.');
+      }
 
-    const passwordMatch = await bcrypt.compare(params.senha, user.senha);
-    if (!passwordMatch) throw new UnauthorizedException('Credenciais inválidas');
+      const passwordMatch = await bcrypt.compare(params.senha, user.senha);
+      if (!passwordMatch) {
+        throw new UnauthorizedException('E-mail ou senha inválidos.');
+      }
 
-    return this.generateAccessToken(user.id);
+      return await this.generateAccessToken(user.id);
+      
+    } catch (error) {
+      console.error('[AuthService.signIn] Erro:', error);
+      
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+      
+      throw new InternalServerErrorException('Falha no servidor ao tentar realizar o login. Tente novamente.');
+    }
   }
-
 }

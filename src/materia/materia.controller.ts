@@ -39,8 +39,5 @@ export class MateriaController {
     return this.materiaService.update(id, updateMateriaDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.materiaService.remove(id);
-  }
+
 }
