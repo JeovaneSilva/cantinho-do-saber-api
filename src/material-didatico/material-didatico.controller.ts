@@ -8,30 +8,36 @@ import {
   Delete,
   ParseIntPipe,
   UseInterceptors,
-  UploadedFile,
   BadRequestException,
+  UploadedFiles,
+  UseGuards,
 } from '@nestjs/common';
 import { MaterialDidaticoService } from './material-didatico.service';
 import { CreateMaterialDidaticoDto } from './dto/create-material-didatico.dto';
 import { UpdateMaterialDidaticoDto } from './dto/update-material-didatico.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import {  FilesInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('materiais-didaticos')
+@UseGuards(AuthGuard)
 export class MaterialDidaticoController {
   constructor(private readonly materialService: MaterialDidaticoService) {}
 
-  @Post()
-  @UseInterceptors(FileInterceptor('arquivo'))
+ @Post()
+  @UseInterceptors(FilesInterceptor('arquivos', 10, {
+    storage: memoryStorage(), 
+  }))
   create(
     @Body() createDto: CreateMaterialDidaticoDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    if (!file) {
-      throw new BadRequestException('O arquivo é obrigatório.');
+    if (!files || files.length === 0) {
+      throw new BadRequestException('Pelo menos um arquivo é obrigatório.');
     }
-    return this.materialService.create(createDto, file);
+    return this.materialService.create(createDto, files);
   }
-
+   
   @Get()
   findAll() {
     return this.materialService.findAll();

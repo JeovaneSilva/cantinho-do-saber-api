@@ -11,11 +11,15 @@ export class CreateMaterialDidaticoDto {
   @IsNotEmpty()
   tipo: TipoMaterial;
 
-
   @IsInt()
   @Type(() => Number)
   @IsNotEmpty()
   materiaId: number;
+
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
+  alunoId?: number;
 
   @IsInt()
   @Type(() => Number)

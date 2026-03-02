@@ -173,6 +173,7 @@ exports.Prisma.MaterialDidaticoScalarFieldEnum = {
   tipo: 'tipo',
   urlArquivo: 'urlArquivo',
   totalDownloads: 'totalDownloads',
+  alunoId: 'alunoId',
   materiaId: 'materiaId',
   createdAt: 'createdAt'
 };
@@ -180,6 +181,11 @@ exports.Prisma.MaterialDidaticoScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {

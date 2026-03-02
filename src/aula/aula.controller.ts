@@ -7,14 +7,17 @@ import {
   Param, 
   Delete,
   Query, 
-  ParseIntPipe 
+  ParseIntPipe, 
+  UseGuards
 } from '@nestjs/common';
 import { AulaService } from './aula.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 import { DiaSemana } from 'generated/prisma';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('aulas') 
+@UseGuards(AuthGuard)
 export class AulaController {
   constructor(private readonly aulaService: AulaService) {}
 

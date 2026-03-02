@@ -783,6 +783,10 @@ export namespace Prisma {
             args: Prisma.UserCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
+          }
           delete: {
             args: Prisma.UserDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$UserPayload>
@@ -848,6 +852,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.MateriaCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MateriaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MateriaPayload>[]
           }
           delete: {
             args: Prisma.MateriaDeleteArgs<ExtArgs>
@@ -915,6 +923,10 @@ export namespace Prisma {
             args: Prisma.AlunoCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.AlunoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlunoPayload>[]
+          }
           delete: {
             args: Prisma.AlunoDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$AlunoPayload>
@@ -980,6 +992,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.AulaCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AulaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AulaPayload>[]
           }
           delete: {
             args: Prisma.AulaDeleteArgs<ExtArgs>
@@ -1047,6 +1063,10 @@ export namespace Prisma {
             args: Prisma.PagamentoCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.PagamentoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>[]
+          }
           delete: {
             args: Prisma.PagamentoDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>
@@ -1112,6 +1132,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.MaterialDidaticoCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaterialDidaticoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialDidaticoPayload>[]
           }
           delete: {
             args: Prisma.MaterialDidaticoDeleteArgs<ExtArgs>
@@ -1372,11 +1396,13 @@ export namespace Prisma {
   export type AlunoCountOutputType = {
     pagamentos: number
     aulas: number
+    materiais: number
   }
 
   export type AlunoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pagamentos?: boolean | AlunoCountOutputTypeCountPagamentosArgs
     aulas?: boolean | AlunoCountOutputTypeCountAulasArgs
+    materiais?: boolean | AlunoCountOutputTypeCountMateriaisArgs
   }
 
   // Custom InputTypes
@@ -1402,6 +1428,13 @@ export namespace Prisma {
    */
   export type AlunoCountOutputTypeCountAulasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AulaWhereInput
+  }
+
+  /**
+   * AlunoCountOutputType without action
+   */
+  export type AlunoCountOutputTypeCountMateriaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialDidaticoWhereInput
   }
 
 
@@ -1642,6 +1675,13 @@ export namespace Prisma {
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
+  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    nome?: boolean
+    senha?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
@@ -1655,6 +1695,7 @@ export namespace Prisma {
     aulas?: boolean | User$aulasArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
@@ -1783,6 +1824,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Users and returns the data saved in the database.
+     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
+     * @example
+     * // Create many Users
+     * const user = await prisma.user.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a User.
@@ -2251,6 +2316,21 @@ export namespace Prisma {
   }
 
   /**
+   * User createManyAndReturn
+   */
+  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Users.
+     */
+    data: UserCreateManyInput | UserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * User update
    */
   export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2553,6 +2633,10 @@ export namespace Prisma {
     _count?: boolean | MateriaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["materia"]>
 
+  export type MateriaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+  }, ExtArgs["result"]["materia"]>
 
   export type MateriaSelectScalar = {
     id?: boolean
@@ -2563,6 +2647,7 @@ export namespace Prisma {
     materiaisDidaticos?: boolean | Materia$materiaisDidaticosArgs<ExtArgs>
     _count?: boolean | MateriaCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type MateriaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $MateriaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Materia"
@@ -2688,6 +2773,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends MateriaCreateManyArgs>(args?: SelectSubset<T, MateriaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Materias and returns the data saved in the database.
+     * @param {MateriaCreateManyAndReturnArgs} args - Arguments to create many Materias.
+     * @example
+     * // Create many Materias
+     * const materia = await prisma.materia.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Materias and only return the `id`
+     * const materiaWithIdOnly = await prisma.materia.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MateriaCreateManyAndReturnArgs>(args?: SelectSubset<T, MateriaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MateriaPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Materia.
@@ -3153,6 +3262,21 @@ export namespace Prisma {
   }
 
   /**
+   * Materia createManyAndReturn
+   */
+  export type MateriaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Materia
+     */
+    select?: MateriaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Materias.
+     */
+    data: MateriaCreateManyInput | MateriaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * Materia update
    */
   export type MateriaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3505,9 +3629,20 @@ export namespace Prisma {
     observacao?: boolean
     pagamentos?: boolean | Aluno$pagamentosArgs<ExtArgs>
     aulas?: boolean | Aluno$aulasArgs<ExtArgs>
+    materiais?: boolean | Aluno$materiaisArgs<ExtArgs>
     _count?: boolean | AlunoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aluno"]>
 
+  export type AlunoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    status?: boolean
+    dataMatricula?: boolean
+    nomeResponsavel?: boolean
+    telefoneResponsavel?: boolean
+    mensalidade?: boolean
+    observacao?: boolean
+  }, ExtArgs["result"]["aluno"]>
 
   export type AlunoSelectScalar = {
     id?: boolean
@@ -3523,14 +3658,17 @@ export namespace Prisma {
   export type AlunoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pagamentos?: boolean | Aluno$pagamentosArgs<ExtArgs>
     aulas?: boolean | Aluno$aulasArgs<ExtArgs>
+    materiais?: boolean | Aluno$materiaisArgs<ExtArgs>
     _count?: boolean | AlunoCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type AlunoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $AlunoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Aluno"
     objects: {
       pagamentos: Prisma.$PagamentoPayload<ExtArgs>[]
       aulas: Prisma.$AulaPayload<ExtArgs>[]
+      materiais: Prisma.$MaterialDidaticoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3657,6 +3795,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends AlunoCreateManyArgs>(args?: SelectSubset<T, AlunoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Alunos and returns the data saved in the database.
+     * @param {AlunoCreateManyAndReturnArgs} args - Arguments to create many Alunos.
+     * @example
+     * // Create many Alunos
+     * const aluno = await prisma.aluno.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Alunos and only return the `id`
+     * const alunoWithIdOnly = await prisma.aluno.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AlunoCreateManyAndReturnArgs>(args?: SelectSubset<T, AlunoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlunoPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Aluno.
@@ -3883,6 +4045,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     pagamentos<T extends Aluno$pagamentosArgs<ExtArgs> = {}>(args?: Subset<T, Aluno$pagamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "findMany"> | Null>
     aulas<T extends Aluno$aulasArgs<ExtArgs> = {}>(args?: Subset<T, Aluno$aulasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AulaPayload<ExtArgs>, T, "findMany"> | Null>
+    materiais<T extends Aluno$materiaisArgs<ExtArgs> = {}>(args?: Subset<T, Aluno$materiaisArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialDidaticoPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4129,6 +4292,21 @@ export namespace Prisma {
   }
 
   /**
+   * Aluno createManyAndReturn
+   */
+  export type AlunoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Aluno
+     */
+    select?: AlunoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Alunos.
+     */
+    data: AlunoCreateManyInput | AlunoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * Aluno update
    */
   export type AlunoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4256,6 +4434,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AulaScalarFieldEnum | AulaScalarFieldEnum[]
+  }
+
+  /**
+   * Aluno.materiais
+   */
+  export type Aluno$materiaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialDidatico
+     */
+    select?: MaterialDidaticoSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialDidaticoInclude<ExtArgs> | null
+    where?: MaterialDidaticoWhereInput
+    orderBy?: MaterialDidaticoOrderByWithRelationInput | MaterialDidaticoOrderByWithRelationInput[]
+    cursor?: MaterialDidaticoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaterialDidaticoScalarFieldEnum | MaterialDidaticoScalarFieldEnum[]
   }
 
   /**
@@ -4488,6 +4686,15 @@ export namespace Prisma {
     _count?: boolean | AulaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aula"]>
 
+  export type AulaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    diaSemana?: boolean
+    horarioInicio?: boolean
+    horarioFim?: boolean
+    observacoes?: boolean
+    professorId?: boolean
+    professor?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["aula"]>
 
   export type AulaSelectScalar = {
     id?: boolean
@@ -4502,6 +4709,9 @@ export namespace Prisma {
     alunos?: boolean | Aula$alunosArgs<ExtArgs>
     professor?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | AulaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AulaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    professor?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $AulaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4633,6 +4843,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends AulaCreateManyArgs>(args?: SelectSubset<T, AulaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Aulas and returns the data saved in the database.
+     * @param {AulaCreateManyAndReturnArgs} args - Arguments to create many Aulas.
+     * @example
+     * // Create many Aulas
+     * const aula = await prisma.aula.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Aulas and only return the `id`
+     * const aulaWithIdOnly = await prisma.aula.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AulaCreateManyAndReturnArgs>(args?: SelectSubset<T, AulaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AulaPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Aula.
@@ -5103,6 +5337,25 @@ export namespace Prisma {
   }
 
   /**
+   * Aula createManyAndReturn
+   */
+  export type AulaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Aula
+     */
+    select?: AulaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Aulas.
+     */
+    data: AulaCreateManyInput | AulaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AulaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Aula update
    */
   export type AulaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5468,6 +5721,18 @@ export namespace Prisma {
     aluno?: boolean | AlunoDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pagamento"]>
 
+  export type PagamentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mesReferencia?: boolean
+    dataVencimento?: boolean
+    valor?: boolean
+    status?: boolean
+    dataPagamento?: boolean
+    alunoId?: boolean
+    createdAt?: boolean
+    updateAt?: boolean
+    aluno?: boolean | AlunoDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pagamento"]>
 
   export type PagamentoSelectScalar = {
     id?: boolean
@@ -5482,6 +5747,9 @@ export namespace Prisma {
   }
 
   export type PagamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aluno?: boolean | AlunoDefaultArgs<ExtArgs>
+  }
+  export type PagamentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     aluno?: boolean | AlunoDefaultArgs<ExtArgs>
   }
 
@@ -5616,6 +5884,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends PagamentoCreateManyArgs>(args?: SelectSubset<T, PagamentoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Pagamentos and returns the data saved in the database.
+     * @param {PagamentoCreateManyAndReturnArgs} args - Arguments to create many Pagamentos.
+     * @example
+     * // Create many Pagamentos
+     * const pagamento = await prisma.pagamento.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Pagamentos and only return the `id`
+     * const pagamentoWithIdOnly = await prisma.pagamento.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PagamentoCreateManyAndReturnArgs>(args?: SelectSubset<T, PagamentoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Pagamento.
@@ -6088,6 +6380,25 @@ export namespace Prisma {
   }
 
   /**
+   * Pagamento createManyAndReturn
+   */
+  export type PagamentoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pagamento
+     */
+    select?: PagamentoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Pagamentos.
+     */
+    data: PagamentoCreateManyInput | PagamentoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PagamentoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Pagamento update
    */
   export type PagamentoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6207,12 +6518,14 @@ export namespace Prisma {
   export type MaterialDidaticoAvgAggregateOutputType = {
     id: number | null
     totalDownloads: number | null
+    alunoId: number | null
     materiaId: number | null
   }
 
   export type MaterialDidaticoSumAggregateOutputType = {
     id: number | null
     totalDownloads: number | null
+    alunoId: number | null
     materiaId: number | null
   }
 
@@ -6222,6 +6535,7 @@ export namespace Prisma {
     tipo: $Enums.TipoMaterial | null
     urlArquivo: string | null
     totalDownloads: number | null
+    alunoId: number | null
     materiaId: number | null
     createdAt: Date | null
   }
@@ -6232,6 +6546,7 @@ export namespace Prisma {
     tipo: $Enums.TipoMaterial | null
     urlArquivo: string | null
     totalDownloads: number | null
+    alunoId: number | null
     materiaId: number | null
     createdAt: Date | null
   }
@@ -6242,6 +6557,7 @@ export namespace Prisma {
     tipo: number
     urlArquivo: number
     totalDownloads: number
+    alunoId: number
     materiaId: number
     createdAt: number
     _all: number
@@ -6251,12 +6567,14 @@ export namespace Prisma {
   export type MaterialDidaticoAvgAggregateInputType = {
     id?: true
     totalDownloads?: true
+    alunoId?: true
     materiaId?: true
   }
 
   export type MaterialDidaticoSumAggregateInputType = {
     id?: true
     totalDownloads?: true
+    alunoId?: true
     materiaId?: true
   }
 
@@ -6266,6 +6584,7 @@ export namespace Prisma {
     tipo?: true
     urlArquivo?: true
     totalDownloads?: true
+    alunoId?: true
     materiaId?: true
     createdAt?: true
   }
@@ -6276,6 +6595,7 @@ export namespace Prisma {
     tipo?: true
     urlArquivo?: true
     totalDownloads?: true
+    alunoId?: true
     materiaId?: true
     createdAt?: true
   }
@@ -6286,6 +6606,7 @@ export namespace Prisma {
     tipo?: true
     urlArquivo?: true
     totalDownloads?: true
+    alunoId?: true
     materiaId?: true
     createdAt?: true
     _all?: true
@@ -6383,6 +6704,7 @@ export namespace Prisma {
     tipo: $Enums.TipoMaterial
     urlArquivo: string
     totalDownloads: number
+    alunoId: number | null
     materiaId: number
     createdAt: Date
     _count: MaterialDidaticoCountAggregateOutputType | null
@@ -6412,11 +6734,25 @@ export namespace Prisma {
     tipo?: boolean
     urlArquivo?: boolean
     totalDownloads?: boolean
+    alunoId?: boolean
     materiaId?: boolean
     createdAt?: boolean
+    aluno?: boolean | MaterialDidatico$alunoArgs<ExtArgs>
     materia?: boolean | MateriaDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["materialDidatico"]>
 
+  export type MaterialDidaticoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    tipo?: boolean
+    urlArquivo?: boolean
+    totalDownloads?: boolean
+    alunoId?: boolean
+    materiaId?: boolean
+    createdAt?: boolean
+    aluno?: boolean | MaterialDidatico$alunoArgs<ExtArgs>
+    materia?: boolean | MateriaDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialDidatico"]>
 
   export type MaterialDidaticoSelectScalar = {
     id?: boolean
@@ -6424,17 +6760,24 @@ export namespace Prisma {
     tipo?: boolean
     urlArquivo?: boolean
     totalDownloads?: boolean
+    alunoId?: boolean
     materiaId?: boolean
     createdAt?: boolean
   }
 
   export type MaterialDidaticoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aluno?: boolean | MaterialDidatico$alunoArgs<ExtArgs>
+    materia?: boolean | MateriaDefaultArgs<ExtArgs>
+  }
+  export type MaterialDidaticoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aluno?: boolean | MaterialDidatico$alunoArgs<ExtArgs>
     materia?: boolean | MateriaDefaultArgs<ExtArgs>
   }
 
   export type $MaterialDidaticoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MaterialDidatico"
     objects: {
+      aluno: Prisma.$AlunoPayload<ExtArgs> | null
       materia: Prisma.$MateriaPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6443,6 +6786,7 @@ export namespace Prisma {
       tipo: $Enums.TipoMaterial
       urlArquivo: string
       totalDownloads: number
+      alunoId: number | null
       materiaId: number
       createdAt: Date
     }, ExtArgs["result"]["materialDidatico"]>
@@ -6561,6 +6905,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends MaterialDidaticoCreateManyArgs>(args?: SelectSubset<T, MaterialDidaticoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaterialDidaticos and returns the data saved in the database.
+     * @param {MaterialDidaticoCreateManyAndReturnArgs} args - Arguments to create many MaterialDidaticos.
+     * @example
+     * // Create many MaterialDidaticos
+     * const materialDidatico = await prisma.materialDidatico.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MaterialDidaticos and only return the `id`
+     * const materialDidaticoWithIdOnly = await prisma.materialDidatico.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MaterialDidaticoCreateManyAndReturnArgs>(args?: SelectSubset<T, MaterialDidaticoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialDidaticoPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a MaterialDidatico.
@@ -6785,6 +7153,7 @@ export namespace Prisma {
    */
   export interface Prisma__MaterialDidaticoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    aluno<T extends MaterialDidatico$alunoArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDidatico$alunoArgs<ExtArgs>>): Prisma__AlunoClient<$Result.GetResult<Prisma.$AlunoPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     materia<T extends MateriaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MateriaDefaultArgs<ExtArgs>>): Prisma__MateriaClient<$Result.GetResult<Prisma.$MateriaPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6820,6 +7189,7 @@ export namespace Prisma {
     readonly tipo: FieldRef<"MaterialDidatico", 'TipoMaterial'>
     readonly urlArquivo: FieldRef<"MaterialDidatico", 'String'>
     readonly totalDownloads: FieldRef<"MaterialDidatico", 'Int'>
+    readonly alunoId: FieldRef<"MaterialDidatico", 'Int'>
     readonly materiaId: FieldRef<"MaterialDidatico", 'Int'>
     readonly createdAt: FieldRef<"MaterialDidatico", 'DateTime'>
   }
@@ -7031,6 +7401,25 @@ export namespace Prisma {
   }
 
   /**
+   * MaterialDidatico createManyAndReturn
+   */
+  export type MaterialDidaticoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialDidatico
+     */
+    select?: MaterialDidaticoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MaterialDidaticos.
+     */
+    data: MaterialDidaticoCreateManyInput | MaterialDidaticoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialDidaticoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * MaterialDidatico update
    */
   export type MaterialDidaticoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7118,6 +7507,21 @@ export namespace Prisma {
      * Filter which MaterialDidaticos to delete
      */
     where?: MaterialDidaticoWhereInput
+  }
+
+  /**
+   * MaterialDidatico.aluno
+   */
+  export type MaterialDidatico$alunoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Aluno
+     */
+    select?: AlunoSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AlunoInclude<ExtArgs> | null
+    where?: AlunoWhereInput
   }
 
   /**
@@ -7215,6 +7619,7 @@ export namespace Prisma {
     tipo: 'tipo',
     urlArquivo: 'urlArquivo',
     totalDownloads: 'totalDownloads',
+    alunoId: 'alunoId',
     materiaId: 'materiaId',
     createdAt: 'createdAt'
   };
@@ -7228,6 +7633,14 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   export const NullsOrder: {
@@ -7251,9 +7664,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+  /**
+   * Reference to a field of type 'String[]'
+   */
+  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
     
 
 
@@ -7265,9 +7692,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
    * Reference to a field of type 'StatusAluno'
    */
   export type EnumStatusAlunoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusAluno'>
+    
+
+
+  /**
+   * Reference to a field of type 'StatusAluno[]'
+   */
+  export type ListEnumStatusAlunoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusAluno[]'>
     
 
 
@@ -7279,9 +7720,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DiaSemana'
    */
   export type EnumDiaSemanaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiaSemana'>
+    
+
+
+  /**
+   * Reference to a field of type 'DiaSemana[]'
+   */
+  export type ListEnumDiaSemanaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiaSemana[]'>
     
 
 
@@ -7293,6 +7748,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'StatusPagamento[]'
+   */
+  export type ListEnumStatusPagamentoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusPagamento[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TipoMaterial'
    */
   export type EnumTipoMaterialFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoMaterial'>
@@ -7300,9 +7762,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TipoMaterial[]'
+   */
+  export type ListEnumTipoMaterialFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoMaterial[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -7422,6 +7898,7 @@ export namespace Prisma {
     observacao?: StringNullableFilter<"Aluno"> | string | null
     pagamentos?: PagamentoListRelationFilter
     aulas?: AulaListRelationFilter
+    materiais?: MaterialDidaticoListRelationFilter
   }
 
   export type AlunoOrderByWithRelationInput = {
@@ -7435,6 +7912,7 @@ export namespace Prisma {
     observacao?: SortOrderInput | SortOrder
     pagamentos?: PagamentoOrderByRelationAggregateInput
     aulas?: AulaOrderByRelationAggregateInput
+    materiais?: MaterialDidaticoOrderByRelationAggregateInput
   }
 
   export type AlunoWhereUniqueInput = Prisma.AtLeast<{
@@ -7451,6 +7929,7 @@ export namespace Prisma {
     observacao?: StringNullableFilter<"Aluno"> | string | null
     pagamentos?: PagamentoListRelationFilter
     aulas?: AulaListRelationFilter
+    materiais?: MaterialDidaticoListRelationFilter
   }, "id">
 
   export type AlunoOrderByWithAggregationInput = {
@@ -7634,8 +8113,10 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialFilter<"MaterialDidatico"> | $Enums.TipoMaterial
     urlArquivo?: StringFilter<"MaterialDidatico"> | string
     totalDownloads?: IntFilter<"MaterialDidatico"> | number
+    alunoId?: IntNullableFilter<"MaterialDidatico"> | number | null
     materiaId?: IntFilter<"MaterialDidatico"> | number
     createdAt?: DateTimeFilter<"MaterialDidatico"> | Date | string
+    aluno?: XOR<AlunoNullableRelationFilter, AlunoWhereInput> | null
     materia?: XOR<MateriaRelationFilter, MateriaWhereInput>
   }
 
@@ -7645,8 +8126,10 @@ export namespace Prisma {
     tipo?: SortOrder
     urlArquivo?: SortOrder
     totalDownloads?: SortOrder
+    alunoId?: SortOrderInput | SortOrder
     materiaId?: SortOrder
     createdAt?: SortOrder
+    aluno?: AlunoOrderByWithRelationInput
     materia?: MateriaOrderByWithRelationInput
   }
 
@@ -7659,8 +8142,10 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialFilter<"MaterialDidatico"> | $Enums.TipoMaterial
     urlArquivo?: StringFilter<"MaterialDidatico"> | string
     totalDownloads?: IntFilter<"MaterialDidatico"> | number
+    alunoId?: IntNullableFilter<"MaterialDidatico"> | number | null
     materiaId?: IntFilter<"MaterialDidatico"> | number
     createdAt?: DateTimeFilter<"MaterialDidatico"> | Date | string
+    aluno?: XOR<AlunoNullableRelationFilter, AlunoWhereInput> | null
     materia?: XOR<MateriaRelationFilter, MateriaWhereInput>
   }, "id">
 
@@ -7670,6 +8155,7 @@ export namespace Prisma {
     tipo?: SortOrder
     urlArquivo?: SortOrder
     totalDownloads?: SortOrder
+    alunoId?: SortOrderInput | SortOrder
     materiaId?: SortOrder
     createdAt?: SortOrder
     _count?: MaterialDidaticoCountOrderByAggregateInput
@@ -7688,6 +8174,7 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialWithAggregatesFilter<"MaterialDidatico"> | $Enums.TipoMaterial
     urlArquivo?: StringWithAggregatesFilter<"MaterialDidatico"> | string
     totalDownloads?: IntWithAggregatesFilter<"MaterialDidatico"> | number
+    alunoId?: IntNullableWithAggregatesFilter<"MaterialDidatico"> | number | null
     materiaId?: IntWithAggregatesFilter<"MaterialDidatico"> | number
     createdAt?: DateTimeWithAggregatesFilter<"MaterialDidatico"> | Date | string
   }
@@ -7795,6 +8282,7 @@ export namespace Prisma {
     observacao?: string | null
     pagamentos?: PagamentoCreateNestedManyWithoutAlunoInput
     aulas?: AulaCreateNestedManyWithoutAlunosInput
+    materiais?: MaterialDidaticoCreateNestedManyWithoutAlunoInput
   }
 
   export type AlunoUncheckedCreateInput = {
@@ -7808,6 +8296,7 @@ export namespace Prisma {
     observacao?: string | null
     pagamentos?: PagamentoUncheckedCreateNestedManyWithoutAlunoInput
     aulas?: AulaUncheckedCreateNestedManyWithoutAlunosInput
+    materiais?: MaterialDidaticoUncheckedCreateNestedManyWithoutAlunoInput
   }
 
   export type AlunoUpdateInput = {
@@ -7820,6 +8309,7 @@ export namespace Prisma {
     observacao?: NullableStringFieldUpdateOperationsInput | string | null
     pagamentos?: PagamentoUpdateManyWithoutAlunoNestedInput
     aulas?: AulaUpdateManyWithoutAlunosNestedInput
+    materiais?: MaterialDidaticoUpdateManyWithoutAlunoNestedInput
   }
 
   export type AlunoUncheckedUpdateInput = {
@@ -7833,6 +8323,7 @@ export namespace Prisma {
     observacao?: NullableStringFieldUpdateOperationsInput | string | null
     pagamentos?: PagamentoUncheckedUpdateManyWithoutAlunoNestedInput
     aulas?: AulaUncheckedUpdateManyWithoutAlunosNestedInput
+    materiais?: MaterialDidaticoUncheckedUpdateManyWithoutAlunoNestedInput
   }
 
   export type AlunoCreateManyInput = {
@@ -8016,6 +8507,7 @@ export namespace Prisma {
     urlArquivo: string
     totalDownloads?: number
     createdAt?: Date | string
+    aluno?: AlunoCreateNestedOneWithoutMateriaisInput
     materia: MateriaCreateNestedOneWithoutMateriaisDidaticosInput
   }
 
@@ -8025,6 +8517,7 @@ export namespace Prisma {
     tipo: $Enums.TipoMaterial
     urlArquivo: string
     totalDownloads?: number
+    alunoId?: number | null
     materiaId: number
     createdAt?: Date | string
   }
@@ -8035,6 +8528,7 @@ export namespace Prisma {
     urlArquivo?: StringFieldUpdateOperationsInput | string
     totalDownloads?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    aluno?: AlunoUpdateOneWithoutMateriaisNestedInput
     materia?: MateriaUpdateOneRequiredWithoutMateriaisDidaticosNestedInput
   }
 
@@ -8044,6 +8538,7 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialFieldUpdateOperationsInput | $Enums.TipoMaterial
     urlArquivo?: StringFieldUpdateOperationsInput | string
     totalDownloads?: IntFieldUpdateOperationsInput | number
+    alunoId?: NullableIntFieldUpdateOperationsInput | number | null
     materiaId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8054,6 +8549,7 @@ export namespace Prisma {
     tipo: $Enums.TipoMaterial
     urlArquivo: string
     totalDownloads?: number
+    alunoId?: number | null
     materiaId: number
     createdAt?: Date | string
   }
@@ -8072,14 +8568,15 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialFieldUpdateOperationsInput | $Enums.TipoMaterial
     urlArquivo?: StringFieldUpdateOperationsInput | string
     totalDownloads?: IntFieldUpdateOperationsInput | number
+    alunoId?: NullableIntFieldUpdateOperationsInput | number | null
     materiaId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -8089,8 +8586,8 @@ export namespace Prisma {
 
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -8098,13 +8595,14 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -8156,8 +8654,8 @@ export namespace Prisma {
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -8172,8 +8670,8 @@ export namespace Prisma {
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -8181,6 +8679,7 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
@@ -8189,8 +8688,8 @@ export namespace Prisma {
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -8236,15 +8735,15 @@ export namespace Prisma {
 
   export type EnumStatusAlunoFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusAluno | EnumStatusAlunoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusAluno[]
-    notIn?: $Enums.StatusAluno[]
+    in?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusAlunoFilter<$PrismaModel> | $Enums.StatusAluno
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -8252,13 +8751,14 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
@@ -8326,8 +8826,8 @@ export namespace Prisma {
 
   export type EnumStatusAlunoWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusAluno | EnumStatusAlunoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusAluno[]
-    notIn?: $Enums.StatusAluno[]
+    in?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusAlunoWithAggregatesFilter<$PrismaModel> | $Enums.StatusAluno
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusAlunoFilter<$PrismaModel>
@@ -8336,8 +8836,8 @@ export namespace Prisma {
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -8345,6 +8845,7 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
@@ -8353,8 +8854,8 @@ export namespace Prisma {
 
   export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
@@ -8369,8 +8870,8 @@ export namespace Prisma {
 
   export type EnumDiaSemanaFilter<$PrismaModel = never> = {
     equals?: $Enums.DiaSemana | EnumDiaSemanaFieldRefInput<$PrismaModel>
-    in?: $Enums.DiaSemana[]
-    notIn?: $Enums.DiaSemana[]
+    in?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
     not?: NestedEnumDiaSemanaFilter<$PrismaModel> | $Enums.DiaSemana
   }
 
@@ -8428,8 +8929,8 @@ export namespace Prisma {
 
   export type EnumDiaSemanaWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.DiaSemana | EnumDiaSemanaFieldRefInput<$PrismaModel>
-    in?: $Enums.DiaSemana[]
-    notIn?: $Enums.DiaSemana[]
+    in?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
     not?: NestedEnumDiaSemanaWithAggregatesFilter<$PrismaModel> | $Enums.DiaSemana
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDiaSemanaFilter<$PrismaModel>
@@ -8438,15 +8939,15 @@ export namespace Prisma {
 
   export type EnumStatusPagamentoFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusPagamento | EnumStatusPagamentoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusPagamento[]
-    notIn?: $Enums.StatusPagamento[]
+    in?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusPagamentoFilter<$PrismaModel> | $Enums.StatusPagamento
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -8509,8 +9010,8 @@ export namespace Prisma {
 
   export type EnumStatusPagamentoWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusPagamento | EnumStatusPagamentoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusPagamento[]
-    notIn?: $Enums.StatusPagamento[]
+    in?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusPagamentoWithAggregatesFilter<$PrismaModel> | $Enums.StatusPagamento
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusPagamentoFilter<$PrismaModel>
@@ -8519,8 +9020,8 @@ export namespace Prisma {
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -8533,9 +9034,25 @@ export namespace Prisma {
 
   export type EnumTipoMaterialFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoMaterial | EnumTipoMaterialFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMaterial[]
-    notIn?: $Enums.TipoMaterial[]
+    in?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
     not?: NestedEnumTipoMaterialFilter<$PrismaModel> | $Enums.TipoMaterial
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type AlunoNullableRelationFilter = {
+    is?: AlunoWhereInput | null
+    isNot?: AlunoWhereInput | null
   }
 
   export type MateriaRelationFilter = {
@@ -8549,6 +9066,7 @@ export namespace Prisma {
     tipo?: SortOrder
     urlArquivo?: SortOrder
     totalDownloads?: SortOrder
+    alunoId?: SortOrder
     materiaId?: SortOrder
     createdAt?: SortOrder
   }
@@ -8556,6 +9074,7 @@ export namespace Prisma {
   export type MaterialDidaticoAvgOrderByAggregateInput = {
     id?: SortOrder
     totalDownloads?: SortOrder
+    alunoId?: SortOrder
     materiaId?: SortOrder
   }
 
@@ -8565,6 +9084,7 @@ export namespace Prisma {
     tipo?: SortOrder
     urlArquivo?: SortOrder
     totalDownloads?: SortOrder
+    alunoId?: SortOrder
     materiaId?: SortOrder
     createdAt?: SortOrder
   }
@@ -8575,6 +9095,7 @@ export namespace Prisma {
     tipo?: SortOrder
     urlArquivo?: SortOrder
     totalDownloads?: SortOrder
+    alunoId?: SortOrder
     materiaId?: SortOrder
     createdAt?: SortOrder
   }
@@ -8582,17 +9103,34 @@ export namespace Prisma {
   export type MaterialDidaticoSumOrderByAggregateInput = {
     id?: SortOrder
     totalDownloads?: SortOrder
+    alunoId?: SortOrder
     materiaId?: SortOrder
   }
 
   export type EnumTipoMaterialWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoMaterial | EnumTipoMaterialFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMaterial[]
-    notIn?: $Enums.TipoMaterial[]
+    in?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
     not?: NestedEnumTipoMaterialWithAggregatesFilter<$PrismaModel> | $Enums.TipoMaterial
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoMaterialFilter<$PrismaModel>
     _max?: NestedEnumTipoMaterialFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type AulaCreateNestedManyWithoutProfessorInput = {
@@ -8708,6 +9246,13 @@ export namespace Prisma {
     connect?: AulaWhereUniqueInput | AulaWhereUniqueInput[]
   }
 
+  export type MaterialDidaticoCreateNestedManyWithoutAlunoInput = {
+    create?: XOR<MaterialDidaticoCreateWithoutAlunoInput, MaterialDidaticoUncheckedCreateWithoutAlunoInput> | MaterialDidaticoCreateWithoutAlunoInput[] | MaterialDidaticoUncheckedCreateWithoutAlunoInput[]
+    connectOrCreate?: MaterialDidaticoCreateOrConnectWithoutAlunoInput | MaterialDidaticoCreateOrConnectWithoutAlunoInput[]
+    createMany?: MaterialDidaticoCreateManyAlunoInputEnvelope
+    connect?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+  }
+
   export type PagamentoUncheckedCreateNestedManyWithoutAlunoInput = {
     create?: XOR<PagamentoCreateWithoutAlunoInput, PagamentoUncheckedCreateWithoutAlunoInput> | PagamentoCreateWithoutAlunoInput[] | PagamentoUncheckedCreateWithoutAlunoInput[]
     connectOrCreate?: PagamentoCreateOrConnectWithoutAlunoInput | PagamentoCreateOrConnectWithoutAlunoInput[]
@@ -8719,6 +9264,13 @@ export namespace Prisma {
     create?: XOR<AulaCreateWithoutAlunosInput, AulaUncheckedCreateWithoutAlunosInput> | AulaCreateWithoutAlunosInput[] | AulaUncheckedCreateWithoutAlunosInput[]
     connectOrCreate?: AulaCreateOrConnectWithoutAlunosInput | AulaCreateOrConnectWithoutAlunosInput[]
     connect?: AulaWhereUniqueInput | AulaWhereUniqueInput[]
+  }
+
+  export type MaterialDidaticoUncheckedCreateNestedManyWithoutAlunoInput = {
+    create?: XOR<MaterialDidaticoCreateWithoutAlunoInput, MaterialDidaticoUncheckedCreateWithoutAlunoInput> | MaterialDidaticoCreateWithoutAlunoInput[] | MaterialDidaticoUncheckedCreateWithoutAlunoInput[]
+    connectOrCreate?: MaterialDidaticoCreateOrConnectWithoutAlunoInput | MaterialDidaticoCreateOrConnectWithoutAlunoInput[]
+    createMany?: MaterialDidaticoCreateManyAlunoInputEnvelope
+    connect?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
   }
 
   export type EnumStatusAlunoFieldUpdateOperationsInput = {
@@ -8764,6 +9316,20 @@ export namespace Prisma {
     deleteMany?: AulaScalarWhereInput | AulaScalarWhereInput[]
   }
 
+  export type MaterialDidaticoUpdateManyWithoutAlunoNestedInput = {
+    create?: XOR<MaterialDidaticoCreateWithoutAlunoInput, MaterialDidaticoUncheckedCreateWithoutAlunoInput> | MaterialDidaticoCreateWithoutAlunoInput[] | MaterialDidaticoUncheckedCreateWithoutAlunoInput[]
+    connectOrCreate?: MaterialDidaticoCreateOrConnectWithoutAlunoInput | MaterialDidaticoCreateOrConnectWithoutAlunoInput[]
+    upsert?: MaterialDidaticoUpsertWithWhereUniqueWithoutAlunoInput | MaterialDidaticoUpsertWithWhereUniqueWithoutAlunoInput[]
+    createMany?: MaterialDidaticoCreateManyAlunoInputEnvelope
+    set?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    disconnect?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    delete?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    connect?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    update?: MaterialDidaticoUpdateWithWhereUniqueWithoutAlunoInput | MaterialDidaticoUpdateWithWhereUniqueWithoutAlunoInput[]
+    updateMany?: MaterialDidaticoUpdateManyWithWhereWithoutAlunoInput | MaterialDidaticoUpdateManyWithWhereWithoutAlunoInput[]
+    deleteMany?: MaterialDidaticoScalarWhereInput | MaterialDidaticoScalarWhereInput[]
+  }
+
   export type PagamentoUncheckedUpdateManyWithoutAlunoNestedInput = {
     create?: XOR<PagamentoCreateWithoutAlunoInput, PagamentoUncheckedCreateWithoutAlunoInput> | PagamentoCreateWithoutAlunoInput[] | PagamentoUncheckedCreateWithoutAlunoInput[]
     connectOrCreate?: PagamentoCreateOrConnectWithoutAlunoInput | PagamentoCreateOrConnectWithoutAlunoInput[]
@@ -8789,6 +9355,20 @@ export namespace Prisma {
     update?: AulaUpdateWithWhereUniqueWithoutAlunosInput | AulaUpdateWithWhereUniqueWithoutAlunosInput[]
     updateMany?: AulaUpdateManyWithWhereWithoutAlunosInput | AulaUpdateManyWithWhereWithoutAlunosInput[]
     deleteMany?: AulaScalarWhereInput | AulaScalarWhereInput[]
+  }
+
+  export type MaterialDidaticoUncheckedUpdateManyWithoutAlunoNestedInput = {
+    create?: XOR<MaterialDidaticoCreateWithoutAlunoInput, MaterialDidaticoUncheckedCreateWithoutAlunoInput> | MaterialDidaticoCreateWithoutAlunoInput[] | MaterialDidaticoUncheckedCreateWithoutAlunoInput[]
+    connectOrCreate?: MaterialDidaticoCreateOrConnectWithoutAlunoInput | MaterialDidaticoCreateOrConnectWithoutAlunoInput[]
+    upsert?: MaterialDidaticoUpsertWithWhereUniqueWithoutAlunoInput | MaterialDidaticoUpsertWithWhereUniqueWithoutAlunoInput[]
+    createMany?: MaterialDidaticoCreateManyAlunoInputEnvelope
+    set?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    disconnect?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    delete?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    connect?: MaterialDidaticoWhereUniqueInput | MaterialDidaticoWhereUniqueInput[]
+    update?: MaterialDidaticoUpdateWithWhereUniqueWithoutAlunoInput | MaterialDidaticoUpdateWithWhereUniqueWithoutAlunoInput[]
+    updateMany?: MaterialDidaticoUpdateManyWithWhereWithoutAlunoInput | MaterialDidaticoUpdateManyWithWhereWithoutAlunoInput[]
+    deleteMany?: MaterialDidaticoScalarWhereInput | MaterialDidaticoScalarWhereInput[]
   }
 
   export type AlunoCreateNestedManyWithoutAulasInput = {
@@ -8869,6 +9449,12 @@ export namespace Prisma {
     update?: XOR<XOR<AlunoUpdateToOneWithWhereWithoutPagamentosInput, AlunoUpdateWithoutPagamentosInput>, AlunoUncheckedUpdateWithoutPagamentosInput>
   }
 
+  export type AlunoCreateNestedOneWithoutMateriaisInput = {
+    create?: XOR<AlunoCreateWithoutMateriaisInput, AlunoUncheckedCreateWithoutMateriaisInput>
+    connectOrCreate?: AlunoCreateOrConnectWithoutMateriaisInput
+    connect?: AlunoWhereUniqueInput
+  }
+
   export type MateriaCreateNestedOneWithoutMateriaisDidaticosInput = {
     create?: XOR<MateriaCreateWithoutMateriaisDidaticosInput, MateriaUncheckedCreateWithoutMateriaisDidaticosInput>
     connectOrCreate?: MateriaCreateOrConnectWithoutMateriaisDidaticosInput
@@ -8879,6 +9465,16 @@ export namespace Prisma {
     set?: $Enums.TipoMaterial
   }
 
+  export type AlunoUpdateOneWithoutMateriaisNestedInput = {
+    create?: XOR<AlunoCreateWithoutMateriaisInput, AlunoUncheckedCreateWithoutMateriaisInput>
+    connectOrCreate?: AlunoCreateOrConnectWithoutMateriaisInput
+    upsert?: AlunoUpsertWithoutMateriaisInput
+    disconnect?: AlunoWhereInput | boolean
+    delete?: AlunoWhereInput | boolean
+    connect?: AlunoWhereUniqueInput
+    update?: XOR<XOR<AlunoUpdateToOneWithWhereWithoutMateriaisInput, AlunoUpdateWithoutMateriaisInput>, AlunoUncheckedUpdateWithoutMateriaisInput>
+  }
+
   export type MateriaUpdateOneRequiredWithoutMateriaisDidaticosNestedInput = {
     create?: XOR<MateriaCreateWithoutMateriaisDidaticosInput, MateriaUncheckedCreateWithoutMateriaisDidaticosInput>
     connectOrCreate?: MateriaCreateOrConnectWithoutMateriaisDidaticosInput
@@ -8887,10 +9483,18 @@ export namespace Prisma {
     update?: XOR<XOR<MateriaUpdateToOneWithWhereWithoutMateriaisDidaticosInput, MateriaUpdateWithoutMateriaisDidaticosInput>, MateriaUncheckedUpdateWithoutMateriaisDidaticosInput>
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -8900,8 +9504,8 @@ export namespace Prisma {
 
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -8914,8 +9518,8 @@ export namespace Prisma {
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -8925,8 +9529,8 @@ export namespace Prisma {
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -8941,8 +9545,8 @@ export namespace Prisma {
 
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -8952,8 +9556,8 @@ export namespace Prisma {
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -8969,8 +9573,8 @@ export namespace Prisma {
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -8983,15 +9587,15 @@ export namespace Prisma {
 
   export type NestedEnumStatusAlunoFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusAluno | EnumStatusAlunoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusAluno[]
-    notIn?: $Enums.StatusAluno[]
+    in?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusAlunoFilter<$PrismaModel> | $Enums.StatusAluno
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -9004,8 +9608,8 @@ export namespace Prisma {
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
@@ -9015,8 +9619,8 @@ export namespace Prisma {
 
   export type NestedEnumStatusAlunoWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusAluno | EnumStatusAlunoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusAluno[]
-    notIn?: $Enums.StatusAluno[]
+    in?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusAluno[] | ListEnumStatusAlunoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusAlunoWithAggregatesFilter<$PrismaModel> | $Enums.StatusAluno
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusAlunoFilter<$PrismaModel>
@@ -9025,8 +9629,8 @@ export namespace Prisma {
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -9042,8 +9646,8 @@ export namespace Prisma {
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -9053,8 +9657,8 @@ export namespace Prisma {
 
   export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
@@ -9069,15 +9673,15 @@ export namespace Prisma {
 
   export type NestedEnumDiaSemanaFilter<$PrismaModel = never> = {
     equals?: $Enums.DiaSemana | EnumDiaSemanaFieldRefInput<$PrismaModel>
-    in?: $Enums.DiaSemana[]
-    notIn?: $Enums.DiaSemana[]
+    in?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
     not?: NestedEnumDiaSemanaFilter<$PrismaModel> | $Enums.DiaSemana
   }
 
   export type NestedEnumDiaSemanaWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.DiaSemana | EnumDiaSemanaFieldRefInput<$PrismaModel>
-    in?: $Enums.DiaSemana[]
-    notIn?: $Enums.DiaSemana[]
+    in?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiaSemana[] | ListEnumDiaSemanaFieldRefInput<$PrismaModel>
     not?: NestedEnumDiaSemanaWithAggregatesFilter<$PrismaModel> | $Enums.DiaSemana
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDiaSemanaFilter<$PrismaModel>
@@ -9086,15 +9690,15 @@ export namespace Prisma {
 
   export type NestedEnumStatusPagamentoFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusPagamento | EnumStatusPagamentoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusPagamento[]
-    notIn?: $Enums.StatusPagamento[]
+    in?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusPagamentoFilter<$PrismaModel> | $Enums.StatusPagamento
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -9104,8 +9708,8 @@ export namespace Prisma {
 
   export type NestedEnumStatusPagamentoWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StatusPagamento | EnumStatusPagamentoFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusPagamento[]
-    notIn?: $Enums.StatusPagamento[]
+    in?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusPagamento[] | ListEnumStatusPagamentoFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusPagamentoWithAggregatesFilter<$PrismaModel> | $Enums.StatusPagamento
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusPagamentoFilter<$PrismaModel>
@@ -9114,8 +9718,8 @@ export namespace Prisma {
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -9128,19 +9732,46 @@ export namespace Prisma {
 
   export type NestedEnumTipoMaterialFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoMaterial | EnumTipoMaterialFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMaterial[]
-    notIn?: $Enums.TipoMaterial[]
+    in?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
     not?: NestedEnumTipoMaterialFilter<$PrismaModel> | $Enums.TipoMaterial
   }
 
   export type NestedEnumTipoMaterialWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoMaterial | EnumTipoMaterialFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMaterial[]
-    notIn?: $Enums.TipoMaterial[]
+    in?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoMaterial[] | ListEnumTipoMaterialFieldRefInput<$PrismaModel>
     not?: NestedEnumTipoMaterialWithAggregatesFilter<$PrismaModel> | $Enums.TipoMaterial
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoMaterialFilter<$PrismaModel>
     _max?: NestedEnumTipoMaterialFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type AulaCreateWithoutProfessorInput = {
@@ -9204,6 +9835,7 @@ export namespace Prisma {
     urlArquivo: string
     totalDownloads?: number
     createdAt?: Date | string
+    aluno?: AlunoCreateNestedOneWithoutMateriaisInput
   }
 
   export type MaterialDidaticoUncheckedCreateWithoutMateriaInput = {
@@ -9212,6 +9844,7 @@ export namespace Prisma {
     tipo: $Enums.TipoMaterial
     urlArquivo: string
     totalDownloads?: number
+    alunoId?: number | null
     createdAt?: Date | string
   }
 
@@ -9250,6 +9883,7 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialFilter<"MaterialDidatico"> | $Enums.TipoMaterial
     urlArquivo?: StringFilter<"MaterialDidatico"> | string
     totalDownloads?: IntFilter<"MaterialDidatico"> | number
+    alunoId?: IntNullableFilter<"MaterialDidatico"> | number | null
     materiaId?: IntFilter<"MaterialDidatico"> | number
     createdAt?: DateTimeFilter<"MaterialDidatico"> | Date | string
   }
@@ -9307,6 +9941,35 @@ export namespace Prisma {
     create: XOR<AulaCreateWithoutAlunosInput, AulaUncheckedCreateWithoutAlunosInput>
   }
 
+  export type MaterialDidaticoCreateWithoutAlunoInput = {
+    titulo: string
+    tipo: $Enums.TipoMaterial
+    urlArquivo: string
+    totalDownloads?: number
+    createdAt?: Date | string
+    materia: MateriaCreateNestedOneWithoutMateriaisDidaticosInput
+  }
+
+  export type MaterialDidaticoUncheckedCreateWithoutAlunoInput = {
+    id?: number
+    titulo: string
+    tipo: $Enums.TipoMaterial
+    urlArquivo: string
+    totalDownloads?: number
+    materiaId: number
+    createdAt?: Date | string
+  }
+
+  export type MaterialDidaticoCreateOrConnectWithoutAlunoInput = {
+    where: MaterialDidaticoWhereUniqueInput
+    create: XOR<MaterialDidaticoCreateWithoutAlunoInput, MaterialDidaticoUncheckedCreateWithoutAlunoInput>
+  }
+
+  export type MaterialDidaticoCreateManyAlunoInputEnvelope = {
+    data: MaterialDidaticoCreateManyAlunoInput | MaterialDidaticoCreateManyAlunoInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PagamentoUpsertWithWhereUniqueWithoutAlunoInput = {
     where: PagamentoWhereUniqueInput
     update: XOR<PagamentoUpdateWithoutAlunoInput, PagamentoUncheckedUpdateWithoutAlunoInput>
@@ -9354,6 +10017,22 @@ export namespace Prisma {
     data: XOR<AulaUpdateManyMutationInput, AulaUncheckedUpdateManyWithoutAlunosInput>
   }
 
+  export type MaterialDidaticoUpsertWithWhereUniqueWithoutAlunoInput = {
+    where: MaterialDidaticoWhereUniqueInput
+    update: XOR<MaterialDidaticoUpdateWithoutAlunoInput, MaterialDidaticoUncheckedUpdateWithoutAlunoInput>
+    create: XOR<MaterialDidaticoCreateWithoutAlunoInput, MaterialDidaticoUncheckedCreateWithoutAlunoInput>
+  }
+
+  export type MaterialDidaticoUpdateWithWhereUniqueWithoutAlunoInput = {
+    where: MaterialDidaticoWhereUniqueInput
+    data: XOR<MaterialDidaticoUpdateWithoutAlunoInput, MaterialDidaticoUncheckedUpdateWithoutAlunoInput>
+  }
+
+  export type MaterialDidaticoUpdateManyWithWhereWithoutAlunoInput = {
+    where: MaterialDidaticoScalarWhereInput
+    data: XOR<MaterialDidaticoUpdateManyMutationInput, MaterialDidaticoUncheckedUpdateManyWithoutAlunoInput>
+  }
+
   export type AlunoCreateWithoutAulasInput = {
     nome: string
     status?: $Enums.StatusAluno
@@ -9363,6 +10042,7 @@ export namespace Prisma {
     mensalidade: Decimal | DecimalJsLike | number | string
     observacao?: string | null
     pagamentos?: PagamentoCreateNestedManyWithoutAlunoInput
+    materiais?: MaterialDidaticoCreateNestedManyWithoutAlunoInput
   }
 
   export type AlunoUncheckedCreateWithoutAulasInput = {
@@ -9375,6 +10055,7 @@ export namespace Prisma {
     mensalidade: Decimal | DecimalJsLike | number | string
     observacao?: string | null
     pagamentos?: PagamentoUncheckedCreateNestedManyWithoutAlunoInput
+    materiais?: MaterialDidaticoUncheckedCreateNestedManyWithoutAlunoInput
   }
 
   export type AlunoCreateOrConnectWithoutAulasInput = {
@@ -9467,6 +10148,7 @@ export namespace Prisma {
     mensalidade: Decimal | DecimalJsLike | number | string
     observacao?: string | null
     aulas?: AulaCreateNestedManyWithoutAlunosInput
+    materiais?: MaterialDidaticoCreateNestedManyWithoutAlunoInput
   }
 
   export type AlunoUncheckedCreateWithoutPagamentosInput = {
@@ -9479,6 +10161,7 @@ export namespace Prisma {
     mensalidade: Decimal | DecimalJsLike | number | string
     observacao?: string | null
     aulas?: AulaUncheckedCreateNestedManyWithoutAlunosInput
+    materiais?: MaterialDidaticoUncheckedCreateNestedManyWithoutAlunoInput
   }
 
   export type AlunoCreateOrConnectWithoutPagamentosInput = {
@@ -9506,6 +10189,7 @@ export namespace Prisma {
     mensalidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     observacao?: NullableStringFieldUpdateOperationsInput | string | null
     aulas?: AulaUpdateManyWithoutAlunosNestedInput
+    materiais?: MaterialDidaticoUpdateManyWithoutAlunoNestedInput
   }
 
   export type AlunoUncheckedUpdateWithoutPagamentosInput = {
@@ -9518,6 +10202,37 @@ export namespace Prisma {
     mensalidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     observacao?: NullableStringFieldUpdateOperationsInput | string | null
     aulas?: AulaUncheckedUpdateManyWithoutAlunosNestedInput
+    materiais?: MaterialDidaticoUncheckedUpdateManyWithoutAlunoNestedInput
+  }
+
+  export type AlunoCreateWithoutMateriaisInput = {
+    nome: string
+    status?: $Enums.StatusAluno
+    dataMatricula?: Date | string
+    nomeResponsavel: string
+    telefoneResponsavel?: string | null
+    mensalidade: Decimal | DecimalJsLike | number | string
+    observacao?: string | null
+    pagamentos?: PagamentoCreateNestedManyWithoutAlunoInput
+    aulas?: AulaCreateNestedManyWithoutAlunosInput
+  }
+
+  export type AlunoUncheckedCreateWithoutMateriaisInput = {
+    id?: number
+    nome: string
+    status?: $Enums.StatusAluno
+    dataMatricula?: Date | string
+    nomeResponsavel: string
+    telefoneResponsavel?: string | null
+    mensalidade: Decimal | DecimalJsLike | number | string
+    observacao?: string | null
+    pagamentos?: PagamentoUncheckedCreateNestedManyWithoutAlunoInput
+    aulas?: AulaUncheckedCreateNestedManyWithoutAlunosInput
+  }
+
+  export type AlunoCreateOrConnectWithoutMateriaisInput = {
+    where: AlunoWhereUniqueInput
+    create: XOR<AlunoCreateWithoutMateriaisInput, AlunoUncheckedCreateWithoutMateriaisInput>
   }
 
   export type MateriaCreateWithoutMateriaisDidaticosInput = {
@@ -9532,6 +10247,42 @@ export namespace Prisma {
   export type MateriaCreateOrConnectWithoutMateriaisDidaticosInput = {
     where: MateriaWhereUniqueInput
     create: XOR<MateriaCreateWithoutMateriaisDidaticosInput, MateriaUncheckedCreateWithoutMateriaisDidaticosInput>
+  }
+
+  export type AlunoUpsertWithoutMateriaisInput = {
+    update: XOR<AlunoUpdateWithoutMateriaisInput, AlunoUncheckedUpdateWithoutMateriaisInput>
+    create: XOR<AlunoCreateWithoutMateriaisInput, AlunoUncheckedCreateWithoutMateriaisInput>
+    where?: AlunoWhereInput
+  }
+
+  export type AlunoUpdateToOneWithWhereWithoutMateriaisInput = {
+    where?: AlunoWhereInput
+    data: XOR<AlunoUpdateWithoutMateriaisInput, AlunoUncheckedUpdateWithoutMateriaisInput>
+  }
+
+  export type AlunoUpdateWithoutMateriaisInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusAlunoFieldUpdateOperationsInput | $Enums.StatusAluno
+    dataMatricula?: DateTimeFieldUpdateOperationsInput | Date | string
+    nomeResponsavel?: StringFieldUpdateOperationsInput | string
+    telefoneResponsavel?: NullableStringFieldUpdateOperationsInput | string | null
+    mensalidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    pagamentos?: PagamentoUpdateManyWithoutAlunoNestedInput
+    aulas?: AulaUpdateManyWithoutAlunosNestedInput
+  }
+
+  export type AlunoUncheckedUpdateWithoutMateriaisInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusAlunoFieldUpdateOperationsInput | $Enums.StatusAluno
+    dataMatricula?: DateTimeFieldUpdateOperationsInput | Date | string
+    nomeResponsavel?: StringFieldUpdateOperationsInput | string
+    telefoneResponsavel?: NullableStringFieldUpdateOperationsInput | string | null
+    mensalidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    pagamentos?: PagamentoUncheckedUpdateManyWithoutAlunoNestedInput
+    aulas?: AulaUncheckedUpdateManyWithoutAlunosNestedInput
   }
 
   export type MateriaUpsertWithoutMateriaisDidaticosInput = {
@@ -9593,6 +10344,7 @@ export namespace Prisma {
     tipo: $Enums.TipoMaterial
     urlArquivo: string
     totalDownloads?: number
+    alunoId?: number | null
     createdAt?: Date | string
   }
 
@@ -9602,6 +10354,7 @@ export namespace Prisma {
     urlArquivo?: StringFieldUpdateOperationsInput | string
     totalDownloads?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    aluno?: AlunoUpdateOneWithoutMateriaisNestedInput
   }
 
   export type MaterialDidaticoUncheckedUpdateWithoutMateriaInput = {
@@ -9610,6 +10363,7 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialFieldUpdateOperationsInput | $Enums.TipoMaterial
     urlArquivo?: StringFieldUpdateOperationsInput | string
     totalDownloads?: IntFieldUpdateOperationsInput | number
+    alunoId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -9619,6 +10373,7 @@ export namespace Prisma {
     tipo?: EnumTipoMaterialFieldUpdateOperationsInput | $Enums.TipoMaterial
     urlArquivo?: StringFieldUpdateOperationsInput | string
     totalDownloads?: IntFieldUpdateOperationsInput | number
+    alunoId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -9631,6 +10386,16 @@ export namespace Prisma {
     dataPagamento?: Date | string | null
     createdAt?: Date | string
     updateAt?: Date | string
+  }
+
+  export type MaterialDidaticoCreateManyAlunoInput = {
+    id?: number
+    titulo: string
+    tipo: $Enums.TipoMaterial
+    urlArquivo: string
+    totalDownloads?: number
+    materiaId: number
+    createdAt?: Date | string
   }
 
   export type PagamentoUpdateWithoutAlunoInput = {
@@ -9691,6 +10456,35 @@ export namespace Prisma {
     professorId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type MaterialDidaticoUpdateWithoutAlunoInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoMaterialFieldUpdateOperationsInput | $Enums.TipoMaterial
+    urlArquivo?: StringFieldUpdateOperationsInput | string
+    totalDownloads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materia?: MateriaUpdateOneRequiredWithoutMateriaisDidaticosNestedInput
+  }
+
+  export type MaterialDidaticoUncheckedUpdateWithoutAlunoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoMaterialFieldUpdateOperationsInput | $Enums.TipoMaterial
+    urlArquivo?: StringFieldUpdateOperationsInput | string
+    totalDownloads?: IntFieldUpdateOperationsInput | number
+    materiaId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialDidaticoUncheckedUpdateManyWithoutAlunoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumTipoMaterialFieldUpdateOperationsInput | $Enums.TipoMaterial
+    urlArquivo?: StringFieldUpdateOperationsInput | string
+    totalDownloads?: IntFieldUpdateOperationsInput | number
+    materiaId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AlunoUpdateWithoutAulasInput = {
     nome?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusAlunoFieldUpdateOperationsInput | $Enums.StatusAluno
@@ -9700,6 +10494,7 @@ export namespace Prisma {
     mensalidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     observacao?: NullableStringFieldUpdateOperationsInput | string | null
     pagamentos?: PagamentoUpdateManyWithoutAlunoNestedInput
+    materiais?: MaterialDidaticoUpdateManyWithoutAlunoNestedInput
   }
 
   export type AlunoUncheckedUpdateWithoutAulasInput = {
@@ -9712,6 +10507,7 @@ export namespace Prisma {
     mensalidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     observacao?: NullableStringFieldUpdateOperationsInput | string | null
     pagamentos?: PagamentoUncheckedUpdateManyWithoutAlunoNestedInput
+    materiais?: MaterialDidaticoUncheckedUpdateManyWithoutAlunoNestedInput
   }
 
   export type AlunoUncheckedUpdateManyWithoutAulasInput = {

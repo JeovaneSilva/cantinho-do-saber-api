@@ -13,12 +13,31 @@ export class AlunosService {
 
   private _formatAluno(aluno: any) {
     if (!aluno) return null;
-    const ultimoPagamento = aluno.pagamentos && aluno.pagamentos.length > 0 ? aluno.pagamentos[0] : null;
+    
+    const pagamentoDoMes = aluno.pagamentos && aluno.pagamentos.length > 0 ? aluno.pagamentos[0] : null;
+    
+    let statusAtual = 'PENDENTE';
+
+    if (pagamentoDoMes) {
+      statusAtual = pagamentoDoMes.status;
+
+      if (statusAtual === 'PENDENTE' && pagamentoDoMes.dataVencimento) {
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        const dataVencimento = new Date(pagamentoDoMes.dataVencimento);
+        dataVencimento.setHours(0, 0, 0, 0);
+
+        if (dataVencimento < hoje) {
+          statusAtual = 'ATRASADO';
+        }
+      }
+    }
     
     return {
       ...aluno,
-      pagamentos: undefined, 
-      statusPagamento: ultimoPagamento ? ultimoPagamento.status : 'PENDENTE',
+      pagamentos: undefined,
+      statusPagamento: statusAtual,
     };
   }
 
@@ -37,9 +56,19 @@ export class AlunosService {
 
   async findAll() {
     try {
+      const hoje = new Date();
+      const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0, 23, 59, 59, 999);
+
       const alunos = await this.prisma.aluno.findMany({
         include: {
           pagamentos: {
+            where: {
+              dataVencimento: {
+                gte: primeiroDiaMes,
+                lte: ultimoDiaMes,
+              }
+            },
             orderBy: { dataVencimento: 'desc' },
             take: 1,
           },

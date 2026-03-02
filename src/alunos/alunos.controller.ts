@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AlunosService } from './alunos.service';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('alunos')
+@UseGuards(AuthGuard)
 export class AlunosController {
   constructor(private readonly alunosService: AlunosService) {}
 

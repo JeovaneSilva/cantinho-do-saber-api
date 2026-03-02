@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -67,6 +67,7 @@ model Aluno {
 
   pagamentos Pagamento[]
   aulas      Aula[]
+  materiais  MaterialDidatico[]
 
   @@map("alunos")
 }
@@ -110,6 +111,9 @@ model MaterialDidatico {
   tipo           TipoMaterial
   urlArquivo     String
   totalDownloads Int          @default(0)
+
+  alunoId Int?
+  aluno   Aluno? @relation(fields: [alunoId], references: [id])
 
   materiaId Int
   materia   Materia @relation(fields: [materiaId], references: [id])

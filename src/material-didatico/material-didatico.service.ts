@@ -7,10 +7,18 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateMaterialDidaticoDto } from './dto/create-material-didatico.dto';
 import { UpdateMaterialDidaticoDto } from './dto/update-material-didatico.dto';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class MaterialDidaticoService {
-  constructor(private readonly prisma: PrismaService) {}
+  private supabase: SupabaseClient;
+
+  constructor(private readonly prisma: PrismaService) {
+    this.supabase = createClient(
+      process.env.SUPABASE_URL as string,
+      process.env.SUPABASE_KEY as string
+    );
+  }
 
 
   private async _garantirQueMaterialExiste(id: number) {
@@ -35,29 +43,73 @@ export class MaterialDidaticoService {
     }
   }
 
+  private async _garantirQueAlunoExiste(alunoId: number) {
+    const aluno = await this.prisma.aluno.findUnique({
+      where: { id: alunoId },
+      select: { id: true }
+    });
+    if (!aluno) throw new NotFoundException(`Aluno com ID ${alunoId} não existe no sistema.`);
+  }
 
-  async create(createDto: CreateMaterialDidaticoDto, file: Express.Multer.File) {
+
+  async create(createDto: CreateMaterialDidaticoDto, files: Express.Multer.File[]) {
     try {
       await this._garantirQueMateriaExiste(createDto.materiaId);
+      
+      if (createDto.alunoId) {
+         await this._garantirQueAlunoExiste(createDto.alunoId);
+      }
 
-      const caminhoArquivo = `${file.filename}`; 
+    const promessasDeCriacao = files.map(async (file) => {
+        const fileExt = file.originalname.split('.').pop()?.toLowerCase();
+        const nomeArquivoUnico = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
-      await this.prisma.materialDidatico.create({
-        data: {
-          titulo: createDto.titulo,
-          tipo: createDto.tipo,
-          materiaId: createDto.materiaId,
-          totalDownloads: createDto.totalDownloads || 0,
-          urlArquivo: caminhoArquivo, 
-        },
+        let mimeTypeCorreto = file.mimetype;
+        if (!mimeTypeCorreto || mimeTypeCorreto === 'application/octet-stream') {
+            if (fileExt === 'pdf') mimeTypeCorreto = 'application/pdf';
+            else if (fileExt === 'png') mimeTypeCorreto = 'image/png';
+            else if (fileExt === 'jpg' || fileExt === 'jpeg') mimeTypeCorreto = 'image/jpeg';
+            else mimeTypeCorreto = 'text/plain';
+        }
+
+        const { error } = await this.supabase.storage
+          .from('materiais')
+          .upload(nomeArquivoUnico, file.buffer, {
+            contentType: mimeTypeCorreto,
+            upsert: false
+          });
+
+        if (error) {
+          console.error('Erro no Supabase:', error);
+          throw new InternalServerErrorException('Falha ao enviar arquivo para a nuvem.');
+        }
+
+        const { data: urlData } = this.supabase.storage
+          .from('materiais')
+          .getPublicUrl(nomeArquivoUnico);
+
+        const tituloFinal = files.length > 1 ? `${createDto.titulo} (${file.originalname})` : createDto.titulo;
+
+        return this.prisma.materialDidatico.create({
+          data: {
+            titulo: tituloFinal,
+            tipo: createDto.tipo,
+            materiaId: createDto.materiaId,
+            alunoId: createDto.alunoId || null,
+            totalDownloads: createDto.totalDownloads || 0,
+            urlArquivo: urlData.publicUrl,
+          },
+        });
       });
 
-      return { message: 'Material didático compartilhado com sucesso!' };
+      await Promise.all(promessasDeCriacao);
+
+      return { message: `${files.length} material(is) compartilhado(s) com sucesso na nuvem!` };
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
       console.error('[MaterialDidaticoService.create] Erro:', error);
-      throw new InternalServerErrorException('Erro interno ao cadastrar o material didático.');
+      throw new InternalServerErrorException('Erro interno ao cadastrar os materiais didáticos.');
     }
   }
 
@@ -66,7 +118,9 @@ export class MaterialDidaticoService {
       return await this.prisma.materialDidatico.findMany({
         include: {
           materia: true, 
+          aluno: { select: { nome: true } } 
         },
+        orderBy: { createdAt: 'desc' }
       });
     } catch (error) {
       console.error('[MaterialDidaticoService.findAll] Erro:', error);
@@ -78,7 +132,7 @@ export class MaterialDidaticoService {
     try {
       const material = await this.prisma.materialDidatico.findUnique({
         where: { id },
-        include: { materia: true },
+        include: { materia: true, aluno: { select: { nome: true } } },
       });
 
       if (!material) {
@@ -104,7 +158,7 @@ export class MaterialDidaticoService {
       return await this.prisma.materialDidatico.update({
         where: { id },
         data: updateDto,
-        include: { materia: true }
+        include: { materia: true, aluno: { select: { nome: true } } }
       });
 
     } catch (error) {
@@ -116,13 +170,31 @@ export class MaterialDidaticoService {
 
   async remove(id: number) {
     try {
-      await this._garantirQueMaterialExiste(id); 
+      const material = await this.prisma.materialDidatico.findUnique({
+        where: { id },
+      });
+
+      if (!material) {
+        throw new NotFoundException(`Material didático com ID ${id} não foi encontrado.`);
+      }
+
+      const nomeArquivo = material.urlArquivo.split('/').pop();
+
+      if (nomeArquivo) {
+        const { error } = await this.supabase.storage
+          .from('materiais')
+          .remove([nomeArquivo]);
+
+        if (error) {
+          console.error('Erro ao deletar arquivo físico no Supabase:', error);
+        }
+      }
 
       await this.prisma.materialDidatico.delete({
         where: { id },
       });
 
-      return { message: 'Material didático removido com sucesso!' };
+      return { message: 'Material didático e arquivo removidos com sucesso!' };
     } catch (error) {
       if (error instanceof HttpException) throw error;
       console.error(`[MaterialDidaticoService.remove] Erro no ID ${id}:`, error);
