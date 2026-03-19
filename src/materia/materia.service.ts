@@ -42,7 +42,6 @@ export class MateriaService {
     } catch (error) {
       if (error instanceof HttpException) throw error;
       
-      console.error('[MateriaService.create] Erro:', error);
       throw new InternalServerErrorException('Erro ao criar a matéria.');
     }
   }
@@ -51,7 +50,6 @@ export class MateriaService {
     try {
       return await this.prisma.materia.findMany();
     } catch (error) {
-      console.error('[MateriaService.findAll] Erro:', error);
       throw new InternalServerErrorException('Erro ao buscar as matérias.');
     }
   }
@@ -69,7 +67,6 @@ export class MateriaService {
       return materia;
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error('[MateriaService.findOne] Erro:', error);
       throw new InternalServerErrorException('Erro ao buscar a matéria.');
     }
   }
@@ -95,7 +92,6 @@ export class MateriaService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error('[MateriaService.update] Erro:', error);
       throw new InternalServerErrorException('Erro ao atualizar a matéria.');
     }
   }

@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
-    origin: '*',
+    origin: 'https://cantinho-do-saber-web.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
     credentials: true, 
   });

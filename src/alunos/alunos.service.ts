@@ -49,7 +49,6 @@ export class AlunosService {
       
       return { message: 'Aluno cadastrado com sucesso!' };
     } catch (error) {
-      console.error('[AlunosService.create] Erro:', error);
       throw new InternalServerErrorException('Erro ao cadastrar o aluno.');
     }
   }
@@ -77,7 +76,6 @@ export class AlunosService {
 
       return alunos.map((aluno) => this._formatAluno(aluno));
     } catch (error) {
-      console.error('[AlunosService.findAll] Erro:', error);
       throw new InternalServerErrorException('Erro ao listar os alunos.');
     }
   }
@@ -100,7 +98,6 @@ export class AlunosService {
 
       return this._formatAluno(aluno);
     } catch (error) {
-      console.error(`[AlunosService.findOne] Erro no ID ${id}:`, error);
       if (error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Erro interno ao buscar o aluno.');
     }
@@ -126,7 +123,6 @@ export class AlunosService {
 
       return this._formatAluno(alunoAtualizado);
     } catch (error) {
-      console.error(`[AlunosService.update] Erro no ID ${id}:`, error);
       if (error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Erro ao tentar atualizar os dados do aluno.');
     }
@@ -145,7 +141,6 @@ export class AlunosService {
 
       return { message: 'Aluno removido com sucesso' };
     } catch (error) {
-      console.error(`[AlunosService.remove] Erro no ID ${id}:`, error);
       if (error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Erro ao excluir aluno. Verifique se ele possui pagamentos ou aulas vinculadas.');
     }

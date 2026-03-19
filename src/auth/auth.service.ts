@@ -28,7 +28,6 @@ export class AuthService {
 
       return { access_token: accessToken };
     } catch (error) {
-      console.error('[AuthService.generateAccessToken] Erro:', error);
       throw new InternalServerErrorException('Erro interno ao gerar a sessão do usuário.');
     }
   }
@@ -51,7 +50,6 @@ export class AuthService {
       return await this.generateAccessToken(user.id);
       
     } catch (error) {
-      console.error('[AuthService.signIn] Erro:', error);
       
       if (error instanceof UnauthorizedException) {
         throw error;

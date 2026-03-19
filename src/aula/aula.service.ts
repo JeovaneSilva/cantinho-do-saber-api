@@ -45,7 +45,6 @@ export class AulaService {
 
       return { message: 'Aula agendada com sucesso!' };
     } catch (error) {
-      console.error('[AulaService.create] Erro:', error);
       throw new InternalServerErrorException('Erro ao agendar a aula. Verifique os dados e tente novamente.');
     }
   }
@@ -65,7 +64,6 @@ export class AulaService {
         ]
       });
     } catch (error) {
-      console.error('[AulaService.findAll] Erro:', error);
       throw new InternalServerErrorException('Erro ao buscar a lista de aulas.');
     }
   }
@@ -86,7 +84,6 @@ export class AulaService {
           include: { alunos: true }
       });
     } catch (error) {
-      console.error(`[AulaService.update] Erro no ID ${id}:`, error);
       if (error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Erro ao atualizar os dados da aula.');
     }
@@ -102,7 +99,6 @@ export class AulaService {
 
       return { message: 'Aula cancelada com sucesso!' };
     } catch (error) {
-      console.error(`[AulaService.remove] Erro no ID ${id}:`, error);
       if (error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Erro ao cancelar a aula.');
     }
@@ -122,7 +118,6 @@ export class AulaService {
          include: { alunos: true }
        });
      } catch (error) {
-       console.error(`[AulaService.addAluno] Erro na Aula ${aulaId}:`, error);
        if (error instanceof NotFoundException) throw error;
        throw new InternalServerErrorException('Erro ao adicionar o aluno na aula.');
      }
@@ -142,7 +137,6 @@ export class AulaService {
          include: { alunos: true }
        });
      } catch (error) {
-       console.error(`[AulaService.removeAluno] Erro na Aula ${aulaId}:`, error);
        if (error instanceof NotFoundException) throw error;
        throw new InternalServerErrorException('Erro ao remover o aluno da aula.');
      }

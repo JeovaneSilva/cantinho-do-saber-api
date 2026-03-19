@@ -80,7 +80,6 @@ export class MaterialDidaticoService {
           });
 
         if (error) {
-          console.error('Erro no Supabase:', error);
           throw new InternalServerErrorException('Falha ao enviar arquivo para a nuvem.');
         }
 
@@ -108,7 +107,6 @@ export class MaterialDidaticoService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error('[MaterialDidaticoService.create] Erro:', error);
       throw new InternalServerErrorException('Erro interno ao cadastrar os materiais didáticos.');
     }
   }
@@ -123,7 +121,6 @@ export class MaterialDidaticoService {
         orderBy: { createdAt: 'desc' }
       });
     } catch (error) {
-      console.error('[MaterialDidaticoService.findAll] Erro:', error);
       throw new InternalServerErrorException('Erro ao buscar a lista de materiais.');
     }
   }
@@ -142,7 +139,6 @@ export class MaterialDidaticoService {
       return material;
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error(`[MaterialDidaticoService.findOne] Erro no ID ${id}:`, error);
       throw new InternalServerErrorException('Erro ao buscar os detalhes do material.');
     }
   }
@@ -163,7 +159,6 @@ export class MaterialDidaticoService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error(`[MaterialDidaticoService.update] Erro no ID ${id}:`, error);
       throw new InternalServerErrorException('Erro ao atualizar as informações do material.');
     }
   }
@@ -197,7 +192,6 @@ export class MaterialDidaticoService {
       return { message: 'Material didático e arquivo removidos com sucesso!' };
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error(`[MaterialDidaticoService.remove] Erro no ID ${id}:`, error);
       throw new InternalServerErrorException('Erro ao tentar remover o material.');
     }
   }

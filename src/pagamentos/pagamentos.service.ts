@@ -52,7 +52,6 @@ export class PagamentosService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error('[PagamentosService.create] Erro:', error);
       throw new InternalServerErrorException('Erro interno ao registrar o pagamento.');
     }
   }
@@ -74,7 +73,6 @@ export class PagamentosService {
       });
 
     } catch (error) {
-      console.error('[PagamentosService.findAll] Erro:', error);
       throw new InternalServerErrorException('Erro ao buscar a lista de pagamentos.');
     }
   }
@@ -96,7 +94,6 @@ export class PagamentosService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error(`[PagamentosService.findOne] Erro no ID ${id}:`, error);
       throw new InternalServerErrorException('Erro ao buscar os detalhes do pagamento.');
     }
   }
@@ -128,7 +125,6 @@ export class PagamentosService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error(`[PagamentosService.update] Erro no ID ${id}:`, error);
       throw new InternalServerErrorException('Erro ao tentar atualizar o pagamento.');
     }
   }
@@ -145,7 +141,6 @@ export class PagamentosService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error(`[PagamentosService.remove] Erro no ID ${id}:`, error);
       throw new InternalServerErrorException('Erro ao excluir o pagamento.');
     }
   }

@@ -42,7 +42,6 @@ export class UserService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error('[UserService.create] Erro:', error);
       throw new InternalServerErrorException('Erro interno ao tentar criar o usuário.');
     }
   }
@@ -73,7 +72,6 @@ export class UserService {
 
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      console.error(`[UserService.findOne] Erro no ID ${id}:`, error);
       throw new InternalServerErrorException('Erro ao buscar as informações do usuário.');
     }
   }
